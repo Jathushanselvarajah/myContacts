@@ -4,8 +4,11 @@ const swaggerUi = require("swagger-ui-express");
 const swaggerJsDoc = require("swagger-jsdoc");
 const mongoose = require("mongoose");
 const app = express();
+app.use(express.json());
 const MONGO_URI = process.env.MONGO_URI;
 const PORT = process.env.PORT || 5000;
+const authRoutes = require("./routes/auth");
+const contactRoutes = require("./routes/contact");
 
 mongoose
   .connect(MONGO_URI)
@@ -30,11 +33,10 @@ const swaggerOptions = {
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
-app.use(express.json());
-const authRoutes = require("./routes/auth");
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 app.use("/auth", authRoutes);
+app.use("/contacts", contactRoutes);
 
 try {
   app.listen(PORT, () => {

@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const contactController = require("../controllers/contactController");
+const requireAuth = require("../middlewares/requireAuth");
 
 /**
  * @swagger
@@ -15,6 +16,8 @@ const contactController = require("../controllers/contactController");
  *   get:
  *     summary: Récupère la liste de tous les contacts
  *     tags: [Contacts]
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: Liste des contacts retournée avec succès
@@ -34,6 +37,8 @@ const contactController = require("../controllers/contactController");
  *   post:
  *     summary: Crée un nouveau contact
  *     tags: [Contacts]
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -53,6 +58,8 @@ const contactController = require("../controllers/contactController");
  *   patch:
  *     summary: Met à jour un contact par son ID
  *     tags: [Contacts]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -90,6 +97,8 @@ const contactController = require("../controllers/contactController");
  *   delete:
  *     summary: Supprime un contact par son ID
  *     tags: [Contacts]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -127,7 +136,14 @@ const contactController = require("../controllers/contactController");
  *           type: string
  *           description: Numéro de téléphone du contact
  *           example: +33783576452
+ *   securitySchemes:
+ *     bearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
  */
+
+router.use(requireAuth);
 
 router.get("/", contactController.getContact);
 router.post("/", contactController.postContact);

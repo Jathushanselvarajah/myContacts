@@ -47,6 +47,19 @@ h2 {
   background-color: #0069d9;
 }
 
+.logout-btn {
+  background-color: #f44;
+  margin-top: 10px;
+  border-radius: 6px;
+  color: white;
+  border: none;
+  padding: 10px;
+}
+
+.logout-btn:hover {
+  background-color: #d33;
+}
+
 .contact-list {
   list-style: none;
   padding: 0;

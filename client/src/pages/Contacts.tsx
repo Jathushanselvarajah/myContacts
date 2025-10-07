@@ -18,6 +18,7 @@ export default function Contacts() {
     phone: "",
   });
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [phoneError, setPhoneError] = useState("");
   const token = localStorage.getItem("token");
 
   async function load() {
@@ -36,9 +37,24 @@ export default function Contacts() {
     }
   }
 
+  function logout() {
+    localStorage.removeItem("token");
+    window.location.href = "/login";
+  }
+
+  function validatePhone(value: string) {
+    const digits = value.replace(/\D/g, "");
+    if (digits.length === 0) return "Numéro requis";
+    if (digits.length < 10) return "Minimum 10 chiffres";
+    if (digits.length > 20) return "Maximum 20 chiffres";
+    return "";
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!form.firstName || !form.phone) return;
+    const err = validatePhone(form.phone);
+    setPhoneError(err);
+    if (err || !form.firstName) return;
 
     const method = editingId ? "PATCH" : "POST";
     const url = editingId
@@ -59,6 +75,7 @@ export default function Contacts() {
 
       setForm({ firstName: "", lastName: "", phone: "" });
       setEditingId(null);
+      setPhoneError("");
       load();
     } catch (e) {
       console.error(e);
@@ -82,6 +99,7 @@ export default function Contacts() {
   function handleEdit(c: Contact) {
     setForm({ firstName: c.firstName, lastName: c.lastName, phone: c.phone });
     setEditingId(c._id || null);
+    setPhoneError("");
   }
 
   useEffect(() => {
@@ -90,6 +108,9 @@ export default function Contacts() {
 
   return (
     <div className="contacts-container">
+      <button className="logout-btn" onClick={logout}>
+        Déconnexion
+      </button>
       <h2>Contacts</h2>
 
       <form onSubmit={handleSubmit} className="contact-form">
@@ -103,6 +124,7 @@ export default function Contacts() {
           placeholder="Nom"
           value={form.lastName}
           onChange={(e) => setForm({ ...form, lastName: e.target.value })}
+          required
         />
         <input
           placeholder="Téléphone"
@@ -110,7 +132,12 @@ export default function Contacts() {
           onChange={(e) => setForm({ ...form, phone: e.target.value })}
           required
         />
-        <button type="submit">{editingId ? "Mettre à jour" : "Ajouter"}</button>
+        {phoneError && (
+          <span style={{ color: "tomato", fontSize: 12 }}>{phoneError}</span>
+        )}
+        <button type="submit" disabled={!form.firstName || !form.phone}>
+          {editingId ? "Mettre à jour" : "Ajouter"}
+        </button>
       </form>
 
       {contacts.length === 0 ? (

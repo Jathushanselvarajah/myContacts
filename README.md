@@ -31,7 +31,6 @@ cd myContacts
 ### 2. Backend
 Créer un fichier `.env` dans `server/` :
 ```
-MONGO_URI=mongodb+srv://jathus_db_user:1234592@mycontacts.p4a99zh.mongodb.net/?retryWrites=true&w=majority&appName=MyContacts
 JWT_SECRET=mon_jwt_secret
 PORT=5000
 ```

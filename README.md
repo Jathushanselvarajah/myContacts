@@ -31,6 +31,7 @@ cd myContacts
 ### 2. Backend
 Créer un fichier `.env` dans `server/` :
 ```
+MONGO_URI=<uri_mongo>
 JWT_SECRET=mon_jwt_secret
 PORT=5000
 ```

@@ -1,6 +1,8 @@
 [build]
-  publish = "client/dist"
-  command = "cd client && npm install && npm run build"
+  # Netlify semble déjà exécuter la commande depuis ./client (base=client implicit)
+  # Donc publish pointe seulement sur dist et la commande n'a pas besoin de cd
+  publish = "dist"
+  command = "npm install && npm run build"
 
 [build.environment]
   NODE_VERSION = "18"
